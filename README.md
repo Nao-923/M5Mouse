@@ -16,4 +16,5 @@ ARグラスを装着するだけでスマホを操作できるようにする！
 - ESP32 BLE Mouse(0.3.1)
 - Adafruit SGP30 Sensor(2.0.3)
 - SparkFun BNO08x Cortex Based IMU@(1.0.6)
-
+- ClosedCube TCA9548A(2020.5.21)
+- ClosedCube I2C Driver(2020.9.8)←これを入れないとTCA9548Aでエラーが起きる
