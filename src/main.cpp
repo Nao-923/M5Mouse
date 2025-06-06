@@ -5,7 +5,7 @@
 #include <SparkFun_BNO08x_Arduino_Library.h>
 #include <Adafruit_SGP30.h>
 #include <array>
-
+#include <BleMouse.h>
 
 #define TCA9548A_I2C_ADDRESS	0x70
 #define SGP_CH 0
@@ -14,6 +14,8 @@
 ClosedCube::Wired::TCA9548A tca9548a;
 BNO08x vrimu;
 Adafruit_SGP30 sgp;
+BleMouse bleMouse;
+
 
 struct BNOData {
   float i;
@@ -81,6 +83,7 @@ SGPData getSGPData() {
 void setup() {
   M5.begin();
   Wire.begin();
+  bleMouse.begin();
 
   Serial.begin(115200);
   delay(1000);
@@ -113,21 +116,34 @@ void loop() {
   delay(10);
   BNOData bnoData = getBNOData();
   SGPData sgpData = getSGPData();
-  if (bnoData.valid) {
-    Serial.print("Quat I: "); Serial.print(bnoData.i, 2); Serial.print("\t");
-    Serial.print("J: "); Serial.print(bnoData.j, 2); Serial.print("\t");
-    Serial.print("K: "); Serial.print(bnoData.k, 2); Serial.print("\t");
-    Serial.print("Real: "); Serial.print(bnoData.real, 2); Serial.print("\t");
-    Serial.print("Accuracy: "); Serial.println(bnoData.accuracy, 2);
-  } else {
-    Serial.println("BNO08x data invalid");
-  }
-  if (sgpData.valid) {
-    Serial.print("TVOC: "); Serial.print(sgpData.TVOC); Serial.print(" ppb\t");
-    Serial.print("eCO2: "); Serial.print(sgpData.eCO2); Serial.println(" ppm");
-    Serial.print("Raw H2: "); Serial.print(sgpData.rawH2); Serial.print("\t");
-    Serial.print("Raw Ethanol: "); Serial.println(sgpData.rawEthanol);
-  } else {
-    Serial.println("SGP30 data invalid");
+  if(bleMouse.isConnected()) {
+    Serial.println("Left click");
+    bleMouse.click(MOUSE_LEFT);
+    delay(500);
+
+    Serial.println("Right click");
+    bleMouse.click(MOUSE_RIGHT);
+    delay(500);
+
+    Serial.println("Scroll wheel click");
+    bleMouse.click(MOUSE_MIDDLE);
+    delay(500);
+
+    Serial.println("Back button click");
+    bleMouse.click(MOUSE_BACK);
+    delay(500);
+
+    Serial.println("Forward button click");
+    bleMouse.click(MOUSE_FORWARD);
+    delay(500);
+
+    Serial.println("Click left+right mouse button at the same time");
+    bleMouse.click(MOUSE_LEFT | MOUSE_RIGHT);
+    delay(500);
+
+    Serial.println("Click left+right mouse button and scroll wheel at the same time");
+    bleMouse.click(MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE);
+    delay(500);
+
   }
 }
